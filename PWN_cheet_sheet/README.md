@@ -316,7 +316,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 # Use-after-free : 
 
-- Sau khi `free` mà ko cho con trỏ ấy về `NULL` thì khi `malloc()` một vùng mới có size giống thế sẽ tái sử dụng vùng nhớ đã bị `free` để exploit
+- Sau khi `free` mà ko cho con trỏ ấy về `NULL` thì khi `malloc()` một vùng mới có size giống thế sẽ tái sử dụng vùng nhớ đã bị `free` để exploit, và khi `printf` hay tương tác gì với vùng cũ thì cũng sẽ in ra dữ liệu của vùng malloc mới
 
 # Double-free :
 
