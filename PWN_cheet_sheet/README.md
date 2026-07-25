@@ -314,6 +314,8 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
   + Unsorted bin : Cấu trúc DSLK đôi, trỏ forward, backword
   + Large/Small bin : Chia ra từ unsorted bin
 
+- `Main arena` : Đây là vùng để quản lý bộ nhớ heap, nó chứa các địa chỉ tới các danh sách ngăn xếp. Khi các chunk free vào Unsorted, Small, và Large bins thì nó sẽ trỏ tới địa chỉ của `Main Arena`
+
 - 1 chunk bị gộp với top chunk khi :
   + Bị `free()`
   + Nằm sát top chunk
