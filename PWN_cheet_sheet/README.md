@@ -314,6 +314,10 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
   + Unsorted bin : Cấu trúc DSLK đôi, trỏ forward, backword
   + Large/Small bin : Chia ra từ unsorted bin
 
+- 1 chunk bị gộp với top chunk khi :
+  + Bị `free()`
+  + Nằm sát top chunk
+
 # Use-after-free : 
 
 - Sau khi `free` mà ko cho con trỏ ấy về `NULL` thì khi `malloc()` một vùng mới có size giống thế sẽ tái sử dụng vùng nhớ đã bị `free` để exploit, và khi `printf` hay tương tác gì với vùng cũ thì cũng sẽ in ra dữ liệu của vùng malloc mới
