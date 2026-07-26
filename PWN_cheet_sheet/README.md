@@ -311,7 +311,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 - Bin (Vùng chứa chunk sau khi `free`) :
   + Tcache bin : chứa tối đa 7chunk, size max: 0x410
   + Fastbin : Chứa chunk size từ 0x20 -> 0x80
-  + Unsorted bin : Cấu trúc DSLK đôi, trỏ forward, backword
+  + Unsorted bin : Cấu trúc DSLK đôi, trỏ forward, backward ( Chỉ 1 có chunk thì 2 con trỏ đều trỏ về `main arena`, còn ko thì backward của chunk đầu là `main arena` và forward chunk cuối là `main arena`)
   + Large/Small bin : Chia ra từ unsorted bin
 
 - `Main arena` : Đây là vùng để quản lý bộ nhớ heap, nó chứa các địa chỉ tới các danh sách ngăn xếp. Khi các chunk free vào Unsorted, Small, và Large bins thì nó sẽ trỏ tới địa chỉ của `Main Arena`
