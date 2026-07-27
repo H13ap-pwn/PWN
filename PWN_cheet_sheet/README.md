@@ -309,7 +309,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
   + Sau đó là : `content`
  
 - Bin (Vùng chứa chunk sau khi `free`) :
-  + Tcache bin : chứa tối đa 7chunk, size max: 0x410
+  + Tcache bin : chứa tối đa 7chunk cùng size, size max: 0x410
   + Fastbin : Chứa chunk size từ 0x20 -> 0x80
   + Unsorted bin : Cấu trúc DSLK đôi, trỏ forward, backward ( Chỉ 1 có chunk thì 2 con trỏ đều trỏ về `main arena`, còn ko thì backward của chunk đầu là `main arena` và forward chunk cuối là `main arena`)
   + Large/Small bin : Chia ra từ unsorted bin ( Khi 1 chunk vào `unsorted bin` sau đó `malloc()` lần nữa nếu ko cùng kích thước `unsorted bin` thì sẽ cho chunk đó vào `large` nếu >= 1024 và `smallbin` nếu ngược lại 
