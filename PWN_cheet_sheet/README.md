@@ -298,7 +298,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - `pthread_create`: Tạo ra luồng mới đi kèm với vùng nhớ TLS riêng biệt.
 
-- TLS lưu trữ thông tin quản lý luồng, chứa `Master Canary` ( canary giống nhau trong mọi thread )
+- TLS lưu trữ thông tin quản lý luồng, chứa `Master Canary` ( canary giống nhau trong mọi thread ), thường nằm gần `buf` nào đó và khi overflow -> leak canary
 
 # HEAP :
 
