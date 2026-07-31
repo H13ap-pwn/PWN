@@ -294,6 +294,12 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 # environ : Thuộc libc trỏ tới stack
 
+# Thread_create & master canary :
+
+- `pthread_create`: Tạo ra luồng mới đi kèm với vùng nhớ TLS riêng biệt.
+
+- TLS lưu trữ thông tin quản lý luồng, chứa `Master Canary` ( canary giống nhau trong mọi thread )
+
 # HEAP :
 
 - `vis` : Xem các chunk
