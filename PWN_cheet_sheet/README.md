@@ -353,4 +353,4 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - Tính `evil_size`(size cần malloc để kéo top chunk đến target_address) = `target_address` - `top_chunk address hiện tại` - 0x20
 
-- `Malloc(evil_size)` -> căn sao cho `top chunk` đến trước `target_address` tầm 0x10 để tránh user data đè luôn làm hỏng `target_address` và rồi khi `malloc()` lần nữa thì nó sẽ lấy bộ nhớ từ `top chunk` mà trong vùng đó `top chunk` chứa cả `target_address` rồi ghi vào, có thể ghi đè lên `target address` 
+- `Malloc(evil_size)` -> căn sao cho `top chunk` đến trước `target_address` tầm 0x10 (để tránh user data đè luôn làm hỏng `target_address`) và rồi khi `malloc()` lần nữa thì nó sẽ lấy bộ nhớ từ `top chunk` mà trong vùng đó `top chunk` chứa cả `target_address` rồi ghi vào, có thể ghi đè lên `target address` 
