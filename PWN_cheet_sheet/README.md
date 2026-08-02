@@ -351,6 +351,6 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - Nhờ off-by-one hoặc overflow thay đổi `size` của top chunk
 
-- Tính `evil_size`(size cần malloc để top chunk nhảy đến target_address) = `target_address` - `top_chunk address hiện tại` - 0x20
+- Tính `evil_size`(size cần malloc để kéo top chunk đến target_address) = `target_address` - `top_chunk address hiện tại` - 0x20
 
 - `Malloc(evil_size)` đến trước target_address ít nhất 0x10 để khi `malloc()` lần nữa thì phần user data bắt đầu từ saved RIP  
