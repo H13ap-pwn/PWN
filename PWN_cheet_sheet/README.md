@@ -346,3 +346,11 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - Từ libc 2.32 cơ chế `Safe _ Linking` làm chunk luôn ko trỏ NULL vì đã mã hóa `forward pointer`
   + Forward pointer = (heap address >> 12) ^ address chunk trước
+
+# House of Force :
+
+- Nhờ off-by-one hoặc overflow thay đổi `size` của top chunk
+
+- Tính `evil_size`(size cần malloc để top chunk nhảy đến target_address) = `target_address` - `top_chunk address hiện tại` - 0x20
+
+- `Malloc(evil_size)` đến trước target_address ít nhất 0x10 để khi `malloc()` lần nữa thì phần user data bắt đầu từ saved RIP  
