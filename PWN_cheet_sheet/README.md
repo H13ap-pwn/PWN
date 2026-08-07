@@ -364,7 +364,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 # Malloc_hook, free_hook trick :
 
 - malloc_hook -> execve onegadget
-  + `tip` để căn chỉnh stack thỏa mãn `constrant onegadget` là overwrite `malloc_hook` -> `realloc + offset` và `realloc_hook`-> execve
+  + `tip` để căn chỉnh stack thỏa mãn `constrant onegadget` là overwrite `malloc_hook` -> `realloc + offset` và `realloc_hook`-> execve (bởi vì trong `realloc` có nhiều push giúp căn chỉnh stack)
 
 - free_hook ->system(/bin/sh)
 
