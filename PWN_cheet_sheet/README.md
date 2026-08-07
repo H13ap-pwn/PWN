@@ -354,3 +354,17 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 - Tính `evil_size`(size cần malloc để kéo top chunk đến target_address) = `target_address` - `top_chunk address hiện tại` - 0x20
 
 - `Malloc(evil_size)` -> căn sao cho `top chunk` đến trước `target_address` tầm 0x10 (để tránh user data đè luôn làm hỏng `target_address`) và rồi khi `malloc()` lần nữa thì nó sẽ lấy bộ nhớ từ `top chunk` mà trong vùng đó `top chunk` chứa cả `target_address` rồi ghi vào, có thể ghi đè lên `target address` 
+
+# Fastbin :
+
+- Muốn `double free` 1 chunk A chỉ cần free A -> B -> A nghĩa là free thêm 1 chunk khác kẹp giữa
+
+- Khi malloc vùng của `fastbin`, `fastbin` có cơ chế sẽ kiểm tra `chunk size` của vùng mình cấp phát -> nên nếu `fake chunk` nằm trong `fast bin` cần chọn `fake chunk` có `address + 0x8`(là chunk size) là trong khoảng `size list` của `fast bin` ( cụ thể khi dùng `malloc_hook` sẽ lấy vùng ở vùng có địa chỉ nhỏ hơn nó sao cho thỏa mãn rồi lấp padding đến đúng `malloc_hook`
+
+# Malloc_hook, free_hook trick :
+
+- malloc_hook -> execve onegadget
+  + `tip` để căn chỉnh stack thỏa mãn `constrant onegadget` là overwrite `malloc_hook` -> `realloc + offset` và `realloc_hook`-> execve
+
+- free_hook ->system(/bin/sh)
+
