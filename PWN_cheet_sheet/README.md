@@ -370,3 +370,16 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - free_hook ->system(/bin/sh)
 
+# Poision null byte  :
+
+- Overwrite 1 byte -> chỉnh `PREV_INUSE` -> Thay đổi size của chunk đã free
+
+- Sau khi thay đổi PREV_INUSE thì số byte cuối ấy sẽ bị tách ra làm chunk riêng vì vậy ta cần tính toán sửa `Prev_size` của `Phantom_chunk` ấy thành size chuẩn sau khi bị tách trước khi free chunk bị chỉnh `PREV_INUSE` để thuận tiện cho việc bypass check free
+
+- Sau đó từ chunk bị free và thay đổi `PREV_INUSE` ta malloc() 2 chunk nhỏ hơn trong đó -> thành 3 chunk A, B, C
+
+- Chọn chunk B làm `victim` -> sau đó ta cần free chunk A(chunk A phải vào `unsortedbin` để phục vụ consolidation back) và chunk thật đằng sau chunk `A, B, C, phantom chunk` để nó gộp ngược do cơ chế check `prev_size`
+
+- Ta được chunk siêu lớn bao trùm lên 5 chunk -> malloc lại đúng size chunk lớn ta sẽ được một con trỏ quản lý và overwrite lại chunk B(victim) cho đúng như ban đầu cũng như set up các chunk sau chunk B(victim) để bypass các check
+
+- Từ đó ta được overlap đó là con trỏ quản lý chunk lớn(cũng chứa B) và chunk B(victim)
