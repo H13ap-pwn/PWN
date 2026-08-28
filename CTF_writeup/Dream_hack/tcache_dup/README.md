@@ -20,7 +20,7 @@
 
 # 3. Exploit :
 
-- Tạo 1 chunk và free 2 lần
+- Ta để ý khi `free` ở bản libc này `tcachebin` ko có key để chống `double free` nên ta tạo 1 chunk và free thẳng 2 lần
 
 ```
 create(0x100, b'0')
