@@ -383,3 +383,15 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 - Ta được chunk siêu lớn bao trùm lên 5 chunk -> malloc lại đúng size chunk lớn ta sẽ được một con trỏ quản lý và overwrite lại chunk B(victim) cho đúng như ban đầu cũng như set up các chunk sau chunk B(victim) để bypass các check
 
 - Từ đó ta được overlap đó là con trỏ quản lý chunk lớn(cũng chứa B) và chunk B(victim)
+
+# IO_FILE :
+
+- Cấu trúc FILE gồm : Struct `IO_FILE` ( 0xd8 byte) và struct `vtable`
+
+- `p * _IO_list_all` : Để xem cấu trúc `IO_FILE` & `vtable`
+
+- `p _IO_file_jumps` : Để xem cấu trúc `vtable`
+
+- Các hàm file sẽ thực hiện theo tờ hướng dẫn `vtable` để thực hiện theo
+
+- hàm `fwrite` sẽ gọi `vtable` + 0x38(__xsputn) để đọc địa chỉ trong đó rồi thực thi
