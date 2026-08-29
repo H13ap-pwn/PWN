@@ -24,7 +24,7 @@ slna(b'> ', 2)
 
 <img width="2550" height="1599" alt="image" src="https://github.com/user-attachments/assets/1d390011-5dcf-4232-aacd-5c9e52fe74dd" />
 
-- Vì bài này ko cho libc nên debug local ko thể get_shell nên chỉ có thể remote thẳng lên sever
+- Vì bài này ko cho libc bản cũ nên debug local là libc mới ( có check vtable ) ko thể get_shell nên chỉ có thể remote thẳng lên sever
 
 # 4. Get Flag :
 
