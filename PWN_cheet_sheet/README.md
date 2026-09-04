@@ -397,3 +397,10 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 - Các hàm file sẽ thực hiện theo tờ hướng dẫn `vtable` để thực hiện theo
 
 - hàm `fwrite` sẽ gọi `vtable` + 0x38(__xsputn) để đọc địa chỉ trong đó rồi thực thi
+
+# Encode base64 toàn bộ nội dung của file:
+```
+with open(exe.path, 'rb') as f:
+    patch_b64 = base64.b64encode(f.read())
+p.sendline(patch_b64)
+```
