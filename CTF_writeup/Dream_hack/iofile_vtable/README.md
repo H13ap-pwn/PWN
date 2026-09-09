@@ -1,6 +1,6 @@
 # 1.Find Bug :
 
-<img width="1978" height="1004" alt="image" src="https://github.com/user-attachments/assets/e26aa592-fd73-4918-921e-797869a5e321" />
+![](./images/1.png)
 
 - Hàm `read` ở option 4 cho phép thay đổi trực tiếp `vtable` address
 
@@ -22,13 +22,15 @@ slna(b'> ', 2)
 
 - Cuối cùng chọn option2 để hàm `fwrite` lấy `fake vtable` + 0x38 = `name` ( đang chứa get_shell )
 
-<img width="2550" height="1599" alt="image" src="https://github.com/user-attachments/assets/1d390011-5dcf-4232-aacd-5c9e52fe74dd" />
+![](./images/2.png)
+
 
 - Vì bài này ko cho libc bản cũ nên debug local là libc mới ( có check vtable ) ko thể get_shell nên chỉ có thể remote thẳng lên sever
 
 # 4. Get Flag :
 
-<img width="1178" height="225" alt="image" src="https://github.com/user-attachments/assets/d58f3e58-f746-43e6-a00d-cedd567cbee0" />
+![](./images/3.png)
+
 
 # 5. Learned :
 

@@ -2,9 +2,10 @@
 
 - Có 2 bug lớn :
   + Hàm `show` dính OOB -> leak libc
-  <img width="1101" height="369" alt="image" src="https://github.com/user-attachments/assets/90b5d620-ff2a-4f70-b973-8c1a83b1f0c6" />
+  ![](./images/1.png)
   + Hàm `delete` dính UAF -> Overwrite `malloc hook` + `onegadget`
-  <img width="1066" height="353" alt="image" src="https://github.com/user-attachments/assets/b9dd5b27-a192-44a8-b6a1-8690e2497798" />
+  ![](./images/2.png)
+
 
 - Nếu chall này theo hướng exploit thì script sẽ như sau :
 ```
@@ -30,7 +31,8 @@
 
 - Sau khi local get shell thành công remote lên sever ta thấy 
 
-<img width="2210" height="793" alt="image" src="https://github.com/user-attachments/assets/ab29fc6c-f1e4-4316-ba1a-35eee431b3bb" />
+  ![](./images/3.png)
+
 
 - Sau khi thấy tình trạng trên, quay lại đọc mô tả, bài này khá bịp khi mô tả yêu cầu chỉ cần mã hóa base64 toàn bộ binary là xong để vượt qua các check rồi sẽ gửi lại flag nên chỉ cần 4 dòng sau :
 ```
@@ -40,5 +42,6 @@ with open(exe.path, 'rb') as f:
 p.sendline(patch_b64)
 ```
 ----------------------------------
-<img width="1413" height="769" alt="image" src="https://github.com/user-attachments/assets/9f19432d-95b9-4580-adc7-617a0bb8e797" />
+  ![](./images/4.png)
+
 

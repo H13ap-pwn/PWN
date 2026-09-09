@@ -25,7 +25,6 @@
 
 * Overwrite được RIP ở hàm nào thì viết shellcode ở hàm đó
 
-*<img width="423" height="52" alt="image" src="https://github.com/user-attachments/assets/d5c1b9bb-a93c-4e3d-835e-227cff7b2375" />
 thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm ljust để hàm shellcode + với byte tự tạo thêm do hàm tạo ra để bằng tham số truyền vào tương đương tràn biến và đè Saved RIP
 
 * Hàm read khi nhập dữ liệu ko tự động thêm byte NULL nên khi printf sẽ bị nối chuỗi kế
@@ -54,11 +53,8 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 * `next(libc.search(b'/bin/sh'))` luôn là offset giữa chuỗi /bin/sh và libc base, cái này hoạt tự lấy libc base + offset để tìm ra chuỗi /bin/sh
 
-*Cụ thể : <img width="436" height="27" alt="image" src="https://github.com/user-attachments/assets/6d02ab3c-9567-4745-87be-9d5bc1b7c3b5" /> 
-
 - Lúc này libc base đang = 0 nên địa chỉ của puts( là = libc base + offset) chính là offset luôn
 
-*Còn khi này : <img width="681" height="376" alt="image" src="https://github.com/user-attachments/assets/39f95e44-9186-4e97-8c10-f0b8637a72bd" />
 - Ta tìm được libc base rồi thì libc.sym['system'] sẽ là địa chỉ system do nó tự lấy libc base + offset luôn và chuỗi /bin/sh tương tự nhưng khác cú pháp 
 
 # Stack pivot khai thác save RBP :
@@ -144,14 +140,11 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - `[:n]` : Số dương bỏ n byte từ trái sang, số âm bỏ n byte từ phải sang
 
-<img width="1146" height="1142" alt="image" src="https://github.com/user-attachments/assets/f5b9adec-02fd-4251-84f5-1844a209b93e" />
-
-
 - `p.recvuntil(b'...', drop=True)`: Nhận đến byte ... và bỏ đi byte ...
 
 - Chạy script thêm NOASLR để nó tĩnh hết để dễ dàng debug
 
-- Hàm printf dừng khi gặp NULL byte vì vậy khi muốn gửi 1 địa chỉ lên stack để dùng formatstring thì payload sẽ gửi cuối bởi địa chị có dạng 0x00... có NULL byte ở cuối theo little endian, trước đó nên là formatstring để in ra chuỗi hoặc địa chỉ này sau <img width="432" height="95" alt="image" src="https://github.com/user-attachments/assets/c2a36418-21c6-46f0-ab1f-53aea551619c" />
+- Hàm printf dừng khi gặp NULL byte vì vậy khi muốn gửi 1 địa chỉ lên stack để dùng formatstring thì payload sẽ gửi cuối bởi địa chị có dạng 0x00... có NULL byte ở cuối theo little endian, trước đó nên là formatstring để in ra chuỗi hoặc địa chỉ này sau
 
 # ATTACK GOT : overwrite GOT được khi NO RELRO hoặc PARTIAL RELRO 
 
@@ -219,7 +212,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - `frame.<thanhghi> = ...` : setup thanh ghi
 
-<img width="561" height="534" alt="image" src="https://github.com/user-attachments/assets/0cc95ebc-9c2b-4a1a-95bd-6e63329b5c82" />
+![](./images/srop.png)
 
 
 # Out of bound :
@@ -280,9 +273,10 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 # Bypass khi opcode 0x0f05 `syscall` bị chặn :
 
-<img width="272" height="172" alt="image" src="https://github.com/user-attachments/assets/d9a83692-906c-4341-966a-a92b2b2d8548" />
+![](./images/bypassopcodesyscall1.png)
 
-<img width="528" height="99" alt="image" src="https://github.com/user-attachments/assets/5e075549-387d-41ac-85bc-431ee3fb399b" />
+![](./images/bypassopcodesyscall2.png)
+
 
 - Gán địa chỉ `sys_call + 1byte` là `0x04` vào rbx sau đó cộng 1 đơn vị thành `0x05` -> bypass thành công
 
@@ -290,7 +284,8 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 # Reverse shell :
 
-<img width="1475" height="1218" alt="image" src="https://github.com/user-attachments/assets/e0fb4282-da69-474a-9567-df06bddd80b3" />
+![](./images/reverseshell.png)
+
 
 # environ : Thuộc libc trỏ tới stack
 

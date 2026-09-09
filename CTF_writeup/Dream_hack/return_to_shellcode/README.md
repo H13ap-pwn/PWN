@@ -1,6 +1,6 @@
 # 1. Find Bug :
 
-<img width="1879" height="733" alt="image" src="https://github.com/user-attachments/assets/c2e2949d-65e9-4011-be76-beb8cd1ee48d" />
+![](./images/1.png)
 
 - Leak address buf, distance buf & $rbp
 
@@ -8,7 +8,8 @@
 
 # 2. Idea :
 
-<img width="1417" height="244" alt="image" src="https://github.com/user-attachments/assets/7b08422b-0561-4054-9cad-37a0998d66db" />
+![](./images/2.png)
+
 
 - NX off -> r2shellcode
 
@@ -20,25 +21,30 @@
 
 # 3. Exploit :
 
-<img width="729" height="112" alt="image" src="https://github.com/user-attachments/assets/4012d1b4-b684-4f64-bd69-addee2ff31df" />
+![](./images/3.png)
+
 
 ----------------
 
-<img width="971" height="280" alt="image" src="https://github.com/user-attachments/assets/f637a1cd-59b5-4770-9962-e70f3ce988d7" />
+![](./images/4.png)
+
 
 ## - Trước hết, lấy địa chỉ buf mà chương trình leak
 
-<img width="506" height="226" alt="image" src="https://github.com/user-attachments/assets/953aff48-bc13-4136-8ede-2360cf4055df" />
+![](./images/5.png)
+
 
 -----------------
 
-<img width="2559" height="645" alt="image" src="https://github.com/user-attachments/assets/63c01128-3193-47f7-b4d2-f25c221c08c3" />
+![](./images/6.png)
+
 
 - Leak canary, đồng thời check bằng `gdb.attach` luôn
 
 - LƯU Ý : Vì canary luôn có `NULL Byte` ở cuối nên dùng `sla` cho hàm `read` thay vì `sa` như thông thường để có `\n(0a)` nối chuỗi 7 byte còn lại của canary -> Sau khi nhận 88 byte 'A' cũng phải nhận thêm `1byte` để skip `0a` -> Để hoàn chỉnh canary phải nhận thêm `NULL byte` ở đầu khi u64
 
-<img width="777" height="586" alt="image" src="https://github.com/user-attachments/assets/c2dbbb0e-0ae9-4c4f-ac76-0d6844c0dc25" />
+![](./images/7.png)
+
 
 - Viết shellcode và overwrite return address -> shellcode
 
@@ -48,4 +54,5 @@
 
 # 4. Get Flag : 
 
-<img width="1141" height="149" alt="image" src="https://github.com/user-attachments/assets/16d55ab9-5831-4cec-9acf-01fb161fef75" />
+![](./images/8.png)
+
