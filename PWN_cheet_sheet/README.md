@@ -341,7 +341,8 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - Từ libc 2.32 cơ chế `Safe _ Linking` làm chunk luôn ko trỏ NULL vì đã mã hóa `forward pointer`
   + Forward pointer = (heap address >> 12) ^ address chunk trước
-
+  + Vậy ta muốn overwrite `Forward pointer` bị encode thì `payload = (address forward pointer chuẩn bị overwrite >> 12) ^ target address`
+  
 - 1 cách nữa là `telescope <address> <number cho lớn dần để nó quét>` : Có tác dụng là hiển thị mọi deference quanh address hiện tại 
 
 # House of Force (libc < 2.29) :
