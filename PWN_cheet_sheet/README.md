@@ -345,13 +345,20 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
   
 - 1 cách nữa là `telescope <address> <number cho lớn dần để nó quét>` : Có tác dụng là hiển thị mọi deference quanh address hiện tại 
 
-# House of Force (libc < 2.29) :
+# House of Force (libc < 2.29) (kéo dài top chunk đến target address):
 
 - Nhờ off-by-one hoặc overflow thay đổi `size` của top chunk
 
 - Tính `evil_size`(size cần malloc để kéo top chunk đến target_address) = `target_address` - `top_chunk address hiện tại` - 0x20
 
 - `Malloc(evil_size)` -> căn sao cho `top chunk` đến trước `target_address` tầm 0x10 (để tránh user data đè luôn làm hỏng `target_address`) và rồi khi `malloc()` lần nữa thì nó sẽ lấy bộ nhớ từ `top chunk` mà trong vùng đó `top chunk` chứa cả `target_address` rồi ghi vào, có thể ghi đè lên `target address` 
+
+# House of Orange ( Đưa chunk vào bin khi ko có hàm `free()`) :
+- Khi `malloc()` với size lớn hơn `size top chunk` thì `top chunk` sẽ vào `bin` theo `size - 0x20`
+- Yêu cầu :
+  + Đuôi size phải = 1 ( `flag bit` của top chunk phải = 1 )
+  + `Address top chunk` + `size`(ko tính flag bit) = address có đuôi ít nhất 3 số 0 (0x....000)
+- Nếu chỉ đưa 1 chunk vào `tcache bin` và overwrite `fd pointer` sau đó malloc 2 lần sẽ ko được vì cách đưa vào bin này chỉ tính index = 1, vì vậy cần đưa ít nhất `2 chunk` vào cùng 1 `size bin`  
 
 # Fastbin :
 
