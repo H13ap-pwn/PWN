@@ -366,6 +366,11 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - Khi malloc vùng của `fastbin`, `fastbin` có cơ chế sẽ kiểm tra `chunk size` của vùng mình cấp phát -> nên nếu `fake chunk` nằm trong `fast bin` cần chọn `fake chunk` có `address + 0x8`(là chunk size) là trong khoảng `size list` của `fast bin` ( cụ thể khi dùng `malloc_hook` sẽ lấy vùng ở vùng có địa chỉ nhỏ hơn nó sao cho thỏa mãn rồi lấp padding đến đúng `malloc_hook`)
 
+- `Fastbin -> Unsorted bin`:
+  + Lấp đầy `tcache`
+  + Khi đang có chunk free ở `fastbin`, gọi `malloc()` với size ko thuộc `tcache`, `fastbin` -> check 
+`unsorted` -> trước khi check `unsorted` sẽ dọn `fastbin` (cho các chunk thuộc `fastbin` vào `unsorted`) rồi cấp phát, nếu sau khi cấp phát size chỉ còn 0x10 (< 0x20) nó sẽ bố thí luôn cả 0x10 (chunk được cấp phát có luôn `main_arena` thông qua việc từng qua `unsorted bin`)
+
 # Malloc_hook, free_hook trick :
 
 - realloc_hook nằm ngay sát trước malloc_hook
@@ -422,7 +427,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
   + Yêu cầu Size: Chunk C bắt buộc thuộc Unsorted Bin để tận dụng hàm `int_free`( dùng để gộp chunk)
 
-  + Trạng thái Giải phóng: Gọi lệnh `Free(A)` và `Free(D)`
+  + Trạng thái Giải phóng: Gọi lệnh `Fake chunk trong (A)` và `Free(D)`
 
   + Thao tác Overlap: Dùng lỗi tại Chunk B ghi đè header Chunk C: gỡ bit `PREV_INUSE` về 0 và sửa `prev_size = size(A) + size(B)`
 
