@@ -364,7 +364,7 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - Muốn `double free` 1 chunk A chỉ cần free A -> B -> A nghĩa là free thêm 1 chunk khác kẹp giữa
 
-- Khi malloc vùng của `fastbin`, `fastbin` có cơ chế sẽ kiểm tra `chunk size` của vùng mình cấp phát -> nên nếu `fake chunk` nằm trong `fast bin` cần chọn `fake chunk` có `address + 0x8`(là chunk size) là trong khoảng `size list` của `fast bin` ( cụ thể khi dùng `malloc_hook` sẽ lấy vùng ở vùng có địa chỉ nhỏ hơn nó sao cho thỏa mãn rồi lấp padding đến đúng `malloc_hook`
+- Khi malloc vùng của `fastbin`, `fastbin` có cơ chế sẽ kiểm tra `chunk size` của vùng mình cấp phát -> nên nếu `fake chunk` nằm trong `fast bin` cần chọn `fake chunk` có `address + 0x8`(là chunk size) là trong khoảng `size list` của `fast bin` ( cụ thể khi dùng `malloc_hook` sẽ lấy vùng ở vùng có địa chỉ nhỏ hơn nó sao cho thỏa mãn rồi lấp padding đến đúng `malloc_hook`)
 
 # Malloc_hook, free_hook trick :
 
@@ -388,6 +388,47 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 - Ta được chunk siêu lớn bao trùm lên 5 chunk -> malloc lại đúng size chunk lớn ta sẽ được một con trỏ quản lý và overwrite lại chunk B(victim) cho đúng như ban đầu cũng như set up các chunk sau chunk B(victim) để bypass các check
 
 - Từ đó ta được overlap đó là con trỏ quản lý chunk lớn(cũng chứa B) và chunk B(victim)
+
+# Consolidation <Gộp chunk > : 
+
+- `Backward Consolidation`: 
+  + Heap Layout: Chunk A (Anchor) | Chunk B (Victim) | Chunk C (Trigger) | Chunk D (Guard)
+
+  + Yêu cầu Size: C thuộc Unsorted Bin để tận dụng hàm `int_free`( dùng để gộp chunk)
+
+  + Trạng thái Giải phóng: Tạo fake chunk trong chunk A kèm theo FD & BK để bypass unlink
+
+  + Thao tác Overlap: Lợi dụng lỗ hổng (Off-By-Null hoặc Heap Overflow) tại Chunk B để tràn dữ liệu sang phần header của Chunk C. Sửa `prev_size` của C thành `fake chunk + size(B)` và gỡ bit `PREV_INUSE` của C về 0
+
+  + Kích hoạt: `Free (C)`
+
+
+
+- `Forward Consolidation`:
+  + Heap Layout: Chunk A (Trigger) | Chunk B (Victim) | Chunk C (Anchor) | Chunk D (Guard)
+
+  + Yêu cầu Size: Chunk A và C thuộc Unsorted Bin
+
+  + Trạng thái Giải phóng: Gọi lệnh `Free(C)`
+
+  + Thao tác Overlap: Lợi dụng lỗ hổng từ một chunk nằm ngay trước A, ghi đè header của A. Đổi giá trị `size(A)` thành `size(A) + size(B)`, và `PREV_SIZE (C)` = `size(A)` + `size(B)`
+
+  + Kích hoạt: `Free(A)`
+
+
+
+- `2 chiều consolidation`:
+  + Heap Layout: Chunk A (Anchor Lùi) | Chunk B (Victim) | Chunk C (Trigger) | Chunk D (Anchor Tiến) | Chunk E (Guard)
+
+  + Yêu cầu Size: Chunk C bắt buộc thuộc Unsorted Bin để tận dụng hàm `int_free`( dùng để gộp chunk)
+
+  + Trạng thái Giải phóng: Gọi lệnh `Free(A)` và `Free(D)`
+
+  + Thao tác Overlap: Dùng lỗi tại Chunk B ghi đè header Chunk C: gỡ bit `PREV_INUSE` về 0 và sửa `prev_size = size(A) + size(B)`
+
+  + Kích hoạt : `Free(C)`
+
+- Cơ chế `unlink` : Gỡ chunk đang `free` ra khỏi liên kết, nó sẽ kiểm tra FD, BK (Mẹo bypass : cho FD, BK trỏ về chính header address)
 
 # IO_FILE :
 
