@@ -368,8 +368,8 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - `Fastbin -> Unsorted bin`:
   + Lấp đầy `tcache`
-  + Khi đang có chunk free ở `fastbin`, gọi `malloc()` với size ko thuộc `tcache`, `fastbin` -> check 
-`unsorted` -> trước khi check `unsorted` sẽ dọn `fastbin` (cho các chunk thuộc `fastbin` vào `unsorted`) rồi cấp phát, nếu sau khi cấp phát size chỉ còn 0x10 (< 0x20) nó sẽ bố thí luôn cả 0x10 (chunk được cấp phát có luôn `main_arena` thông qua việc từng qua `unsorted bin`)
+  + Overwrite size top chunk < size chuẩn bị `malloc`
+  + Khi đang có chunk free ở `fastbin`, gọi `malloc()` với size ko thuộc `tcache`, `fastbin` -> check `unsorted` -> trước khi check `unsorted` sẽ dọn `fastbin` (cho các chunk thuộc `fastbin` vào `unsorted`) rồi cấp phát, nếu sau khi cấp phát size chỉ còn 0x10 (< 0x20) nó sẽ bố thí luôn cả 0x10 (chunk được cấp phát có luôn `main_arena` thông qua việc từng qua `unsorted bin`)
 
 # Malloc_hook, free_hook trick :
 
