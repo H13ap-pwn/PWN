@@ -353,6 +353,12 @@ thay vì đếm shellcode chiếm bao nhiêu byte thì ta có thể dùng hàm l
 
 - `Malloc(evil_size)` -> căn sao cho `top chunk` đến trước `target_address` tầm 0x10 (để tránh user data đè luôn làm hỏng `target_address`) và rồi khi `malloc()` lần nữa thì nó sẽ lấy bộ nhớ từ `top chunk` mà trong vùng đó `top chunk` chứa cả `target_address` rồi ghi vào, có thể ghi đè lên `target address` 
 
+# House of Spirit :
+- Tạo fake chunk tại vùng nhớ có thể kiểm soát(Stack, BSS, ...)
+- Tận dụng bug nào đó để con trỏ trỏ đến fake chunk
+- Khi `free` bị lừa đây là heap hợp lệ 
+- Lưu ý : Fake chunk tại vùng nhớ ko thuộc heap vẫn phải setup các chunk xung quanh như thường
+
 # House of Orange ( Đưa chunk vào bin khi ko có hàm `free()`) :
 - Khi `malloc()` với size lớn hơn `size top chunk` thì `top chunk` sẽ vào `bin` theo `size - 0x20`
 - Yêu cầu :
